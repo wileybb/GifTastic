@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+</head>
+
+<body>
+
+    <div id="button-area"></div>
+
+    <form id="animal-form">
+            <label for="animal-input">Add an animal!</label>
+            <br>
+            <input type="text" id="animal-input">
+            <br>
+            <!-- Button triggers new animal to be added -->
+            <input id="add-animal" type="submit" value="Add an Animal, Yo!">
+            
+    </form>
+    <button id="clear-button">CLEAR</button>
+    <div class="container"></div>
+
+
+<!-- link to Jquery----------------------->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- JavaScript-------------------- -->
+
+
+<script type="text/javascript">
+
+    var animals = ["swan", "bat", "fox", "eagle","shark","tiger","monkey","mantis"];
+
+
+
+
+// ------------creating buttons-------------------------------------->
+
+
+function renderButtons() {
+    $("#button-area").empty();
+
+    for(var i=0; i<animals.length; i++){
+        console.log(animals[i]);
+
+        var a = $("<button>");
+          // Adding a class
+          a.addClass("animal-button");
+          // Adding a data-attribute with a value of the animal at index i
+          a.attr("data-name", animals[i]);
+          // Providing the button's text with a value of the animal at index i
+          a.text(animals[i]);
+          // Adding the button to the HTML
+          $("#button-area").append(a);
+    };
+};
+
+$(document).on("click", ".animal-button", displayGif);
+
+$(document).on("click", "#clear-button", function(){
+    $(".container").empty();
+});
+
+renderButtons();
+
+    //----------------AJAX call to Giphy when pressing an animal button----------------------------------->
+function displayGif() {
+
+    var animalName = $(this).attr("data-name");
+
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + animalName + "&api_key=Nmo83t2ddeUUrzIGVdPNOD5tQSWYwpLb";
+
+        $.ajax({
+        url: queryURL,
+        method: "GET"
+        }).then(function(response) {
+        console.log(response);
+
+
+        var gifArray = response.data;
+        console.log(gifArray)
+        for(var i = 0; i < 11; i++){
+        var image = $('<img>');
+        image.attr('src', gifArray[i].images.fixed_height.url);
+        $('.container').append(image);
+        }
+
+    });
+
+    };
+
+
+    //---------------adding a button----------------->
+
+    $("#add-animal").on("click", function(event) {
+        event.preventDefault();
+        // This line grabs the input from the textbox
+        var animal = $("#animal-input").val().trim();
+
+        // Adding movie from the textbox to our array
+        animals.push(animal);
+
+        // Calling renderButtons which handles the processing of our movie array
+        renderButtons();
+    });
+
+</script>
+
+</body>
+</html>
+
+
+<!-- giphy api key: Nmo83t2ddeUUrzIGVdPNOD5tQSWYwpLb -->
