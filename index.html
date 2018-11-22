@@ -2,9 +2,21 @@
 <html>
 
 <head>
+  <!-- <style>
+        body {
+            background-color: powderblue;
+            }
+        h1  {color: blue;
+             }
+        p   {
+            color: red;
+            background-color:aqua;
+            }
+                
+    </style> -->
 </head>
 
-<body>
+<body style="background-image: url(https://www.iaspaper.net/wp-content/uploads/2017/01/save-earth.jpg)">
 
     <div id="button-area"></div>
 
@@ -14,7 +26,7 @@
             <input type="text" id="animal-input">
             <br>
             <!-- Button triggers new animal to be added -->
-            <input id="add-animal" type="submit" value="Add an Animal, Yo!">
+            <input id="add-animal" type="submit" value="Add an Animal, and only an animal please!">
             
     </form>
     <button id="clear-button">CLEAR</button>
@@ -29,7 +41,7 @@
 
 <script type="text/javascript">
 
-    var animals = ["swan", "bat", "fox", "eagle","shark","tiger","monkey","mantis"];
+    var animals = ["swan", "bat", "fox", "eagle","shark","tiger","monkey","mantis","jellyfish","horse"];
 
 
 
@@ -80,10 +92,28 @@ function displayGif() {
         var gifArray = response.data;
         console.log(gifArray)
         for(var i = 0; i < 11; i++){
-        var image = $('<img>');
-        image.attr('src', gifArray[i].images.fixed_height.url);
-        $('.container').append(image);
+
+            var image = $('<img>');
+
+            var rating = gifArray[i].rating;
+     
+       
+            var newRating = $('<p>');
+             
+            newRating.text("Rating: ");
+
+            image.attr("class", "animalGif");
+            image.attr('data-state', "still");
+            image.attr('src', gifArray[i].images.fixed_height_still.url);
+        
+            image.attr('data-still', gifArray[i].images.fixed_height_still.url);
+            image.attr('data-animate', gifArray[i].images.fixed_height.url);
+            $('.container').prepend("Rated: "+rating);
+        
+            $('.container').prepend(image);
+            $('.container').prepend("<br>");
         }
+       
 
     });
 
@@ -103,8 +133,36 @@ function displayGif() {
         // Calling renderButtons which handles the processing of our movie array
         renderButtons();
     });
-
+    $(document).on("click", ".animalGif", function() {
+        console.log("onclick triggered");
+      // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+        var state = $(this).attr("data-state");
+      // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+      // Then, set the image's data-state to animate
+      // Else set src to the data-still value
+        if (state === "still") {
+            $(this).attr("src", $(this).attr("data-animate"));
+            $(this).attr("data-state", "animate");
+            } else {
+            $(this).attr("src", $(this).attr("data-still"));
+            $(this).attr("data-state", "still");
+        }
+    });
+  
 </script>
+
+<!-- <style>
+        body {
+            background-color: powderblue;
+            }
+        h1  {color: blue;
+             }
+        p   {
+            color: red;
+            background-color:aqua;
+            }
+                
+</style> -->
 
 </body>
 </html>
